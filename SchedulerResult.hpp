@@ -19,11 +19,11 @@ class SchedulerResult {
     this->averageTurnAroundTime = averageTurnAroundTime;
   }
 
-  double getAverageWaitTime() {
+  double getAverageWaitTime() const {
     return averageWaitTime;
   }
 
-  double getAverageTurnAroundTime() {
+  double getAverageTurnAroundTime() const {
     return averageTurnAroundTime;
   }
 };
