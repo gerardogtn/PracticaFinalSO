@@ -10,6 +10,7 @@ set(sources
    main.cpp)
 set(testSources
     ProcessReaderTest.cpp
+    RoundRobinSchedulerTest.cpp
     )
 add_executable(tests ${testSources} ${sources})
 target_link_libraries(tests gmock)

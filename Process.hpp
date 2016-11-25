@@ -29,6 +29,10 @@ class Process {
   int getPriority() { return priority; }
   double getDuration() { return duration; }
   double getArrivalTime() { return arrivalTime; }
+
+  void reduceDuration(double difference) {
+    duration -= difference;
+  }
 };
 
 #endif  // PROCESS_H
