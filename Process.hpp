@@ -2,6 +2,7 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
+#include <ostream>
 #include <string>
 
 class Process {
@@ -25,14 +26,16 @@ class Process {
       arrivalTime == other.arrivalTime;
   }
 
-  std::string getName() { return name; }
-  int getPriority() { return priority; }
-  double getDuration() { return duration; }
-  double getArrivalTime() { return arrivalTime; }
+  std::string getName() const { return name; }
+  int getPriority() const { return priority; }
+  double getDuration() const { return duration; }
+  double getArrivalTime() const { return arrivalTime; }
 
   void reduceDuration(double difference) {
     duration -= difference;
   }
+
+  friend std::ostream& operator<<(std::ostream& os, const Process& p);
 };
 
 #endif  // PROCESS_H
