@@ -63,3 +63,14 @@ TEST(ARoundRobinScheduler, UnsortedMultipleProcessWithNonZeroArrivalTime) {
 
   ASSERT_THAT(scheduler.getSteps(), Eq(steps));
 }
+
+TEST(ARoundRobinScheduler, MultipleProcessesWithTimeDifferenceLargerThanQuanta) {
+  std::list<Process> processes { Process("Process1", 0, 5.0, 5),
+      Process("Process2", 15.0, 5.0, 5)};
+  RoundRobinScheduler scheduler(5, processes);
+
+  std::list<SchedulerStep> steps { SchedulerStep("Process1", 0.0, 5.0),
+    SchedulerStep("Process2", 15.0, 20.0)};
+
+  ASSERT_THAT(scheduler.getSteps(), Eq(steps));
+}

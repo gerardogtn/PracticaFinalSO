@@ -22,7 +22,7 @@ class Process {
   bool operator==(const Process& other) const {
     return name == other.name &&
       priority == other.priority &&
-      duration == other.duration &&
+      // duration == other.duration &&
       arrivalTime == other.arrivalTime;
   }
 
