@@ -12,9 +12,6 @@ void fixedPriorityScheduler(std::list<Process> processes, int quanta,
 void roundRobinPriorityScheduler(std::list<Process> processes, int quanta,
   SchedulerResult* schedulerResult);
 
-// Para compilar: g++ main.cpp -o main.o -std=c++11 -pthread
-// Para correr: ./main.o nombreArchivo numPuerto
-//          Ej: ./main.o procesos 12800
 int main(int argc, char const *argv[]) {
   SchedulerResult fixedPriorityResult;
   SchedulerResult roundRobinResult;
