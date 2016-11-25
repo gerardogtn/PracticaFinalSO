@@ -2,7 +2,9 @@
 #ifndef ROUNDROBINSCHEDULER_H
 #define ROUNDROBINSCHEDULER_H
 
+#include <iostream>
 #include <list>
+#include "processComparison.hpp"
 #include "SchedulerStep.hpp"
 #include "Process.hpp"
 
@@ -15,7 +17,8 @@ class RoundRobinScheduler {
  public:
   explicit RoundRobinScheduler(int quanta, std::list<Process> processes)
     : quanta(quanta), processes(processes) {
-      currentTime = processes.front().getArrivalTime();
+      this->processes.sort(compareByArrivalTime);
+      currentTime = this->processes.front().getArrivalTime();
     }
   virtual ~RoundRobinScheduler() {}
 
