@@ -19,8 +19,8 @@ int main(int argc, char const *argv[]) {
   SchedulerResult fixedPriorityResult;
   SchedulerResult roundRobinResult;
 
-  ProcessReader reader;
-  auto pair = reader.read(argv[1]);
+  ProcessReader reader(argv[1]);
+  auto pair = reader.read();
   std::list<Process> processes = pair.second;
 
   std::thread fixedPriorityThread(fixedPriorityScheduler, pair.first, processes,
