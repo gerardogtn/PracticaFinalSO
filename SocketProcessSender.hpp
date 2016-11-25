@@ -16,7 +16,6 @@ class SocketProcessSender {
   struct sockaddr_in serverAddress;
   struct hostent *server;
   int port;
-  int pid;
   int socketd;
 
   void createSocket() {
@@ -51,10 +50,11 @@ class SocketProcessSender {
   }
 
   void writeSafely(const char* message) {
-    pid = ::send(socketd, message, 1024, 0);
-    if (pid < 0)
+    int n = ::send(socketd, message, 1024, 0);
+    if (n < 0) {
+      end();
       throw std::runtime_error("Error writing to socket.");
-    // close(socketd);
+    }
   }
 
   void writeSafely(std::string string) {
