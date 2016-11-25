@@ -7,7 +7,8 @@ add_definitions(-std=c++0x)
 set(CMAKE_CXX_FLAGS "${CMAXE_CXX_FLAGS} -Wall")
 
 set(sources
-   main.cpp)
+   main.cpp
+   ../Process.cpp)
 set(testSources
     ProcessReaderTest.cpp
     RoundRobinSchedulerTest.cpp
