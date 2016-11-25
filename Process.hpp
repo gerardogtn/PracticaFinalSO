@@ -24,6 +24,11 @@ class Process {
       duration == other.duration &&
       arrivalTime == other.arrivalTime;
   }
+
+  std::string getName() { return name; }
+  int getPriority() { return priority; }
+  double getDuration() { return duration; }
+  double getArrivalTime() { return arrivalTime; }
 };
 
 #endif  // PROCESS_H
