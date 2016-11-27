@@ -6,7 +6,7 @@
 #include <list>
 #include <string>
 #include <cctype>
-// #include "SchedulerStep.hpp"
+#include "SchedulerStep.hpp"
 #include "Process.hpp"
 
 
@@ -26,51 +26,53 @@ public:
     }
     virtual ~FixedPriorityScheduler() {}
 
-    void setSteps(){
-        // std::list<SchedulerStep> steps = std::list<SchedulerStep>();
-        std::list<Process> queue;
+    std::list<SchedulerStep> setSteps(){
+      std::list<SchedulerStep> steps = std::list<SchedulerStep>();
+      std::list<Process> queue;
 
-        Process currentProcess = processes.front();
-        processes.pop_front();
-        queue.push_back(currentProcess);
-        Process next;
+      Process currentProcess = processes.front();
+      processes.pop_front();
+      queue.push_back(currentProcess);
+      Process next;
 
+      double t, addedTime;
+      while (!queue.empty()) {
+        queue.sort(higherPriority);
+        currentProcess = queue.front();
+        queue.pop_front();
 
-        double t;
-        while (!queue.empty()) {
-            queue.sort(higherPriority);
+        if(!processes.empty()){
+          next = processes.front();
+          t = next.getArrivalTime()-currentTime;
+          if(t>currentProcess.getDuration()){
+            addedTime = currentTime + currentProcess.getDuration();
+            steps.push_back(SchedulerStep(currentProcess.getName(), currentTime,addedTime));
+            currentTime = addedTime;
+            currentProcess.reduceDuration(currentProcess.getDuration());
             currentProcess = queue.front();
             queue.pop_front();
-
-            if(!processes.empty()){
-                next = processes.front();
-                t = next.getArrivalTime()-currentTime;
-                if(t>currentProcess.getDuration()){
-                    currentTime = currentTime + currentProcess.getDuration();
-                    currentProcess.reduceDuration(currentProcess.getDuration());
-                    currentProcess = queue.front();
-                    queue.pop_front();
-                }
-                else{
-                    currentProcess.reduceDuration(t);
-                    currentTime = next.getArrivalTime();
-                    processes.pop_front();
-                    if(t!=currentProcess.getDuration()){
-                        queue.push_back(currentProcess);
-                    }
-                    queue.push_back(next);
-                }
+          }
+          else{
+            steps.push_back(SchedulerStep(currentProcess.getName(), currentTime, currentTime+t));
+            currentProcess.reduceDuration(t);
+            currentTime = next.getArrivalTime();
+            processes.pop_front();
+            if(t!=currentProcess.getDuration()){
+              queue.push_back(currentProcess);
             }
-            else{
-                next = queue.front();
-                currentTime = currentTime + currentProcess.getDuration();
-                currentProcess.reduceDuration(currentProcess.getDuration());
-            }
-
+            queue.push_back(next);
+          }
         }
-
+        else{
+          addedTime = currentTime + currentProcess.getDuration();
+          steps.push_back(SchedulerStep(currentProcess.getName(), currentTime, addedTime));
+          next = queue.front();
+          currentTime = currentTime + currentProcess.getDuration();
+          currentProcess.reduceDuration(currentProcess.getDuration());
+        }
+      }
+      return steps;
     }
-
 };
 
 #endif
