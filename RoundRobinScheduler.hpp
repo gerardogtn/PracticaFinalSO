@@ -38,11 +38,12 @@ class RoundRobinScheduler {
   void onProcessNotReady(Process* next) {
     if (last == nullptr) {
       last = next;
+      processes.push_back(*next);
     } else if (*last == *next) {
       currentTime = next->getArrivalTime();
+      processes.push_front(*next);
       last = nullptr;
     }
-    processes.push_back(*next);
   }
 
   void onBurstProcess(const Process& process) {
@@ -58,7 +59,7 @@ class RoundRobinScheduler {
 
   void updateClock(double time) {
     currentTime += time;
-      updateWaitingTime(time);
+    updateWaitingTime(time);
   }
 
  public:
