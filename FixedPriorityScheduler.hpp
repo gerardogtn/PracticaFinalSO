@@ -10,7 +10,6 @@
 #include "Process.hpp"
 
 
-
 class FixedPriorityScheduler{
 private:
     double currentTime;
@@ -29,58 +28,44 @@ public:
 
     void setSteps(){
         // std::list<SchedulerStep> steps = std::list<SchedulerStep>();
+        std::list<Process> queue;
 
         Process currentProcess = processes.front();
         processes.pop_front();
-
-        std::list<Process> queue;
-        double t;
+        queue.push_back(currentProcess);
         Process next;
-        bool finished = false;
 
-        while (!finished) {
-          queue.sort(higherPriority);
-          if(!processes.empty()){
-            next = processes.front();
-            t = next.getArrivalTime()-currentTime;
-            if(t>currentProcess.getDuration()){
-              currentTime = currentTime + currentProcess.getDuration();
-              currentProcess.reduceDuration(currentProcess.getDuration());
-              currentProcess = queue.front();
-              queue.pop_front();
+
+        double t;
+        while (!queue.empty()) {
+            queue.sort(higherPriority);
+            currentProcess = queue.front();
+            queue.pop_front();
+
+            if(!processes.empty()){
+                next = processes.front();
+                t = next.getArrivalTime()-currentTime;
+                if(t>currentProcess.getDuration()){
+                    currentTime = currentTime + currentProcess.getDuration();
+                    currentProcess.reduceDuration(currentProcess.getDuration());
+                    currentProcess = queue.front();
+                    queue.pop_front();
+                }
+                else{
+                    currentProcess.reduceDuration(t);
+                    currentTime = next.getArrivalTime();
+                    processes.pop_front();
+                    if(t!=currentProcess.getDuration()){
+                        queue.push_back(currentProcess);
+                    }
+                    queue.push_back(next);
+                }
             }
             else{
-              currentProcess.reduceDuration(t);
-              currentTime = next.getArrivalTime();
-              processes.pop_front();
-              // If smaller
-              if(t<currentProcess.getDuration()){
-                if(higherPriority(next,currentProcess)){
-                  queue.push_back(currentProcess);
-                  currentProcess = next;
-                }
-                else
-                  queue.push_back(next);
-              }
-              // If equal
-              else{
-                currentProcess = queue.front();
-                queue.pop_front();
-              }
-
+                next = queue.front();
+                currentTime = currentTime + currentProcess.getDuration();
+                currentProcess.reduceDuration(currentProcess.getDuration());
             }
-          }
-          else{
-            next = queue.front();
-            currentTime = currentTime + currentProcess.getDuration();
-            currentProcess.reduceDuration(currentProcess.getDuration());
-            if(!queue.empty()){
-                currentProcess = queue.front();
-                queue.pop_front();
-            }
-            else
-                finished = true;
-          }
 
         }
 
