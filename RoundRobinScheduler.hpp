@@ -33,6 +33,16 @@ class RoundRobinScheduler {
     waitingTime += readyQueue.size() * wait;
   }
 
+  void onProcessNotReady(Process* next, double * currentTime) {
+    if (last == nullptr) {
+      last = next;
+    } else if (*last == *next) {
+      *currentTime = next->getArrivalTime();
+      last = nullptr;
+    }
+    processes.push_back(*next);
+  }
+
  public:
   explicit RoundRobinScheduler(int quanta, std::list<Process> processes)
     : quanta(quanta), processes(processes) {
@@ -51,13 +61,7 @@ class RoundRobinScheduler {
 
       double nextTime;
       if (next.getArrivalTime() > currentTime) {
-        if (last == nullptr) {
-          last = &next;
-        } else if (*last == next) {
-          currentTime = next.getArrivalTime();
-          last = nullptr;
-        }
-        processes.push_back(next);
+        onProcessNotReady(&next, &currentTime);
         continue;
       }
       if (next.getDuration() <= quanta) {
@@ -71,7 +75,6 @@ class RoundRobinScheduler {
         processes.push_back(next);
       }
 
-      last = nullptr;
       steps.push_back(SchedulerStep(next.getName(), currentTime, nextTime));
       currentTime = nextTime;
     }
