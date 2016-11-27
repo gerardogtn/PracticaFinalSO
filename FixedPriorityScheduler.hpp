@@ -49,8 +49,6 @@ public:
             steps.push_back(SchedulerStep(currentProcess.getName(), currentTime,addedTime));
             currentTime = addedTime;
             currentProcess.reduceDuration(currentProcess.getDuration());
-            currentProcess = queue.front();
-            queue.pop_front();
           }
           else{
             steps.push_back(SchedulerStep(currentProcess.getName(), currentTime, currentTime+t));
