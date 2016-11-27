@@ -48,6 +48,12 @@ class RoundRobinScheduler {
     turnaroundTime += currentTime - process.getArrivalTime();
   }
 
+  void onReduceProcessDuration(Process* process) {
+    updateClock(quanta);
+    process->reduceDuration(quanta);
+    processes.push_back(*process);
+  }
+
   void updateClock(double time) {
     currentTime += time;
       updateWaitingTime(time);
@@ -76,9 +82,7 @@ class RoundRobinScheduler {
       } else if (next.getDuration() <= quanta) {
         onBurstProcess(next);
       } else {
-        updateClock(quanta);
-        next.reduceDuration(quanta);
-        processes.push_back(next);
+        onReduceProcessDuration(&next);
       }
 
       steps.push_back(SchedulerStep(next.getName(), previousTime, currentTime));
