@@ -33,14 +33,19 @@ class RoundRobinScheduler {
     waitingTime += readyQueue.size() * wait;
   }
 
-  void onProcessNotReady(Process* next, double * currentTime) {
+  void onProcessNotReady(Process* next) {
     if (last == nullptr) {
       last = next;
     } else if (*last == *next) {
-      *currentTime = next->getArrivalTime();
+      currentTime = next->getArrivalTime();
       last = nullptr;
     }
     processes.push_back(*next);
+  }
+
+  void updateClock(double time) {
+    currentTime += time;
+      updateWaitingTime(time);
   }
 
  public:
@@ -58,25 +63,21 @@ class RoundRobinScheduler {
     while (!processes.empty()) {
       Process next = processes.front();
       processes.pop_front();
+      double previousTime = currentTime;
 
-      double nextTime;
       if (next.getArrivalTime() > currentTime) {
-        onProcessNotReady(&next, &currentTime);
+        onProcessNotReady(&next);
         continue;
-      }
-      if (next.getDuration() <= quanta) {
-        nextTime = currentTime + next.getDuration();
-        updateWaitingTime(next.getDuration());
-        turnaroundTime += nextTime - next.getArrivalTime();
+      } else if (next.getDuration() <= quanta) {
+        updateClock(next.getDuration());
+        turnaroundTime += currentTime - next.getArrivalTime();
       } else {
-        nextTime = currentTime + quanta;
+        updateClock(quanta);
         next.reduceDuration(quanta);
-        updateWaitingTime(quanta);
         processes.push_back(next);
       }
 
-      steps.push_back(SchedulerStep(next.getName(), currentTime, nextTime));
-      currentTime = nextTime;
+      steps.push_back(SchedulerStep(next.getName(), previousTime, currentTime));
     }
 
     return steps;
