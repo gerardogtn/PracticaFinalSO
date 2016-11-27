@@ -74,3 +74,23 @@ TEST(ARoundRobinScheduler, MultipleProcessesWithTimeDifferenceLargerThanQuanta) 
 
   ASSERT_THAT(scheduler.getSteps(), Eq(steps));
 }
+
+TEST(ARoundRobinScheduler, ZeroWaitTime) {
+  std::list<Process> processes { Process("Process1", 0, 5.0, 5),
+      Process("Process2", 15.0, 5.0, 5)};
+  RoundRobinScheduler scheduler(5, processes);
+
+  scheduler.getSteps();
+
+  ASSERT_THAT(scheduler.getAverageWaitTime(), DoubleEq(0.0));
+}
+
+TEST(ARoundRobinScheduler, NonZeroWaitTime) {
+  std::list<Process> processes { Process("Process1", 0.0, 10.0, 5),
+      Process("Process2", 0.0, 5.0, 5)};
+  RoundRobinScheduler scheduler(5, processes);
+
+  scheduler.getSteps();
+
+  ASSERT_THAT(scheduler.getAverageWaitTime(), DoubleEq(5.0));
+}
