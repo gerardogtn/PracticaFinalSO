@@ -87,7 +87,9 @@ class RoundRobinScheduler {
         onReduceProcessDuration(&next);
       }
 
-      steps.push_back(SchedulerStep(next.getName(), previousTime, currentTime));
+      SchedulerStep step(next.getName(), previousTime,
+                          currentTime, getReadyQueue());
+      steps.push_back(step);
     }
 
     return steps;
