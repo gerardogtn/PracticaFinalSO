@@ -15,13 +15,13 @@ class RoundRobinScheduler {
   std::list<Process> processes;
   Process* last = nullptr;
   double waitingTime = 0.0;
+  double turnaroundTime = 0.0;
   int processNum;
 
   std::list<Process> getReadyQueue() {
     std::list<Process> readyQueue;
     for (Process p : processes) {
       if (p.getArrivalTime() <= currentTime) {
-        std::cout << p << '\n';
         readyQueue.push_back(p);
       }
     }
@@ -63,6 +63,7 @@ class RoundRobinScheduler {
       if (next.getDuration() <= quanta) {
         nextTime = currentTime + next.getDuration();
         updateWaitingTime(next.getDuration());
+        turnaroundTime += nextTime - next.getArrivalTime();
       } else {
         nextTime = currentTime + quanta;
         next.reduceDuration(quanta);
@@ -80,6 +81,10 @@ class RoundRobinScheduler {
 
   double getAverageWaitTime() {
     return waitingTime / processNum;
+  }
+
+  double getAverageTurnAroundTime() {
+    return turnaroundTime / processNum;
   }
 };
 

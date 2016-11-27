@@ -94,3 +94,23 @@ TEST(ARoundRobinScheduler, NonZeroWaitTime) {
 
   ASSERT_THAT(scheduler.getAverageWaitTime(), DoubleEq(5.0));
 }
+
+TEST(ARoundRobinScheduler, SingleProcessTurnAroundTime) {
+  std::list<Process> processes { Process("Process1", 0.0, 10.0, 5) };
+  RoundRobinScheduler scheduler(5, processes);
+
+  scheduler.getSteps();
+
+  ASSERT_THAT(scheduler.getAverageTurnAroundTime(), DoubleEq(10.0));
+}
+
+TEST(ARoundRobinScheduler, MultipleProcessTurnAroundTime) {
+  std::list<Process> processes { Process("Process1", 0.0, 10.0, 5),
+      Process("Process2", 0.0, 5.0, 5)};
+  RoundRobinScheduler scheduler(5, processes);
+
+  scheduler.getSteps();
+
+  ASSERT_THAT(scheduler.getAverageTurnAroundTime(),
+              DoubleEq((10.0 - 0.0 + 15.0 - 0.0) / 2));
+}
