@@ -19,6 +19,7 @@ class SchedulerStep {
   std::string getName() { return name; }
   double getStartTime() { return startTime; }
   double getEndTime() { return endTime; }
+  double getDuration() { return endTime - startTime; }
 
   bool operator==(const SchedulerStep& other) const {
     return name == other.name &&
