@@ -54,7 +54,8 @@ class RoundRobinScheduler {
         if (last == nullptr) {
           last = &next;
         } else if (*last == next) {
-          currentTime += quanta;
+          currentTime = next.getArrivalTime();
+          last = nullptr;
         }
         processes.push_back(next);
         continue;
