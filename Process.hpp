@@ -17,6 +17,8 @@ class Process {
     name(name), priority(priority), duration(duration),
     arrivalTime(arrivalTime) {}
 
+  Process(){}
+  
   virtual ~Process() {}
 
   bool operator==(const Process& other) const {
