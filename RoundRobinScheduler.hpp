@@ -10,13 +10,15 @@
 
 class RoundRobinScheduler {
  private:
+  const int quanta;
+  const int PROCESS_NUMBER;
+
   double currentTime;
-  int quanta;
-  std::list<Process> processes;
-  Process* last = nullptr;
   double waitingTime = 0.0;
   double turnaroundTime = 0.0;
-  const int PROCESS_NUMBER;
+
+  std::list<Process> processes;
+  Process* last = nullptr;
 
   std::list<Process> getReadyQueue() {
     std::list<Process> readyQueue;
@@ -61,7 +63,7 @@ class RoundRobinScheduler {
 
  public:
   explicit RoundRobinScheduler(int quanta, std::list<Process> processes)
-    : quanta(quanta), processes(processes), PROCESS_NUMBER(processes.size()) {
+    : quanta(quanta), PROCESS_NUMBER(processes.size()), processes(processes) {
       this->processes.sort(compareByArrivalTime);
       currentTime = this->processes.front().getArrivalTime();
     }
