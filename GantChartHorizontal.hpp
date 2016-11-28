@@ -1,15 +1,15 @@
 #ifndef GANTTCHARTHORIZONTAL_H
 #define GANTTCHARTHORIZONTAL_H
 
-#include <list>
-#include <ostream>
-#include <string>
-#include "SchedulerStep.hpp"
-#include "Process.hpp"
+
 #include <sys/ioctl.h>
 #include <stdio.h>
 #include <unistd.h>
-
+#include <list>
+#include <iostream>
+#include <string>
+#include "SchedulerStep.hpp"
+#include "Process.hpp"
 
 class GanttChartHorizontal {
 private:
@@ -21,11 +21,10 @@ public:
 
   void write(){
     struct winsize w;
-    ioctl(STDOUT_FILENO,TIOCGWINSZ,&w);
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 
     double last = steps.back().getEndTime();
     int ndigits = 5;
-
 
     while(!steps.empty()){
 

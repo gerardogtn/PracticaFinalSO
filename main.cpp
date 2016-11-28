@@ -60,9 +60,9 @@ void fixedPriorityScheduler(std::list<Process> processes, std::string fileName,
   GanttChartWriter writer(steps, out);
   writer.write();
 
-  // out << "\n \n Gantt Chart horizontal: \n";
-  // GanttChartHorizontal horizontal(scheduler.getSteps(), out);
-  // horizontal.write();
+  out << "\n \n Gantt Chart horizontal: \n";
+  GanttChartHorizontal horizontal(steps, out);
+  horizontal.write();
 
   out.close();
 }
@@ -73,12 +73,14 @@ void roundRobinPriorityScheduler(std::list<Process> processes, int quanta,
   out.open(fileName + "_RoundRobin");
 
   RoundRobinScheduler scheduler(quanta, processes);
-  GanttChartWriter writer(scheduler.getSteps(), out);
+  std::list<SchedulerStep> steps = scheduler.getSteps();
+
+  GanttChartWriter writer(steps, out);
   writer.write();
 
-  // out << "\n \n Gantt Chart horizontal: \n";
-  // GanttChartHorizontal horizontal(scheduler.getSteps(), out);
-  // horizontal.write();
+  out << "\n \n Gantt Chart horizontal: \n";
+  GanttChartHorizontal horizontal(steps, out);
+  horizontal.write();
 
   socketSender.send("Round robin: ", scheduler.getResult());
   out.close();
