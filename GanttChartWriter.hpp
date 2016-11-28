@@ -52,6 +52,7 @@ class GanttChartWriter {
       for (auto step : steps) {
         if (minSpace > step.getDuration()) minSpace = step.getDuration();
       }
+      if (minSpace == 0) minSpace = 1;
     }
 
   void write() {
