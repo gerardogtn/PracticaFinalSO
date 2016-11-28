@@ -9,6 +9,10 @@ class SchedulerResult {
 
  public:
   SchedulerResult() {}
+  SchedulerResult(double averageWaitTime, double averageTurnAroundTime) :
+    averageWaitTime(averageWaitTime), averageTurnAroundTime(averageTurnAroundTime)
+  {}
+
   virtual ~SchedulerResult() {}
 
   void setAverageWaitTime(double averageWaitTime) {

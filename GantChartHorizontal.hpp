@@ -14,10 +14,12 @@
 class GanttChartHorizontal {
 private:
   std::list<SchedulerStep> steps;
+  std::ostream& os;
 public:
-  GanttChartHorizontal(std::list<SchedulerStep> steps) : steps(steps){}
+  GanttChartHorizontal(std::list<SchedulerStep> steps, std::ostream& os)
+    : steps(steps), os(os) {}
 
-  void doyathang{
+  void write(){
     struct winsize w;
     ioctl(STDOUT_FILENO,TIOCGWINSZ,&w);
 
@@ -35,33 +37,33 @@ public:
         int ns = s/last*(w.ws_col-ndigits);
         int ne = e/last*(w.ws_col-ndigits);
 
-        std::cout << current.getName();
+        os << current.getName();
         for (int i = ndigits; i<ne; i++) {
             if(i>=ns){
-                std::cout << "=";
+                os << "=";
             }
             else{
-                std::cout << " ";
+                os << " ";
             }
         }
-        std::cout << std::endl;
+        os << std::endl;
         for(int i = 0;i<ndigits;i++){
-            std::cout << " ";
+            os << " ";
         }
         for (int i = ndigits; i<=ne; i++) {
             if(i==ne){
-                std::cout << e;
+                os << e;
                 std::list<Process> queue = current.getReadyQueue();
                 while(!queue.empty()){
                     Process p = queue.front();
                     queue.pop_front();
-                    std::cout << " " << p.getName();
+                    os << " " << p.getName();
                 }
             }
             else
-                std::cout << " ";
+                os << " ";
         }
-        std::cout << std::endl;
+        os << std::endl;
     }
   }
 

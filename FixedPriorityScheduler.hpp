@@ -21,12 +21,12 @@ private:
 public:
 
     explicit FixedPriorityScheduler(std::list<Process> processes)
-    : processes(processes) {
+      : processes(processes) {
         currentTime = processes.front().getArrivalTime();
     }
     virtual ~FixedPriorityScheduler() {}
 
-    std::list<SchedulerStep> setSteps(){
+    std::list<SchedulerStep> getSteps(){
       std::list<SchedulerStep> steps = std::list<SchedulerStep>();
       std::list<Process> queue;
 

@@ -102,6 +102,10 @@ class RoundRobinScheduler {
   double getAverageTurnAroundTime() {
     return turnaroundTime / PROCESS_NUMBER;
   }
+
+  SchedulerResult getResult() {
+    return SchedulerResult(getAverageWaitTime(), getAverageTurnAroundTime());
+  }
 };
 
 #endif  // ROUNDROBINSCHEDULER_H
