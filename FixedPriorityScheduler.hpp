@@ -16,7 +16,7 @@ private:
     std::list<Process> processes;
 
     static bool higherPriority( Process & a, Process & b){
-        return a.getPriority() > b.getPriority();
+        return a.getPriority() < b.getPriority();
     }
 public:
 
@@ -46,12 +46,12 @@ public:
           t = next.getArrivalTime()-currentTime;
           if(t>currentProcess.getDuration()){
             addedTime = currentTime + currentProcess.getDuration();
-            steps.push_back(SchedulerStep(currentProcess.getName(), currentTime,addedTime));
+            steps.push_back(SchedulerStep(currentProcess.getName(), currentTime,addedTime,queue));
             currentTime = addedTime;
             currentProcess.reduceDuration(currentProcess.getDuration());
           }
           else{
-            steps.push_back(SchedulerStep(currentProcess.getName(), currentTime, currentTime+t));
+            steps.push_back(SchedulerStep(currentProcess.getName(), currentTime, currentTime+t,queue));
             currentProcess.reduceDuration(t);
             currentTime = next.getArrivalTime();
             processes.pop_front();
@@ -63,7 +63,7 @@ public:
         }
         else{
           addedTime = currentTime + currentProcess.getDuration();
-          steps.push_back(SchedulerStep(currentProcess.getName(), currentTime, addedTime));
+          steps.push_back(SchedulerStep(currentProcess.getName(), currentTime, addedTime,queue));
           next = queue.front();
           currentTime = currentTime + currentProcess.getDuration();
           currentProcess.reduceDuration(currentProcess.getDuration());
